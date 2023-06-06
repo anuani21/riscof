@@ -338,9 +338,6 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
                     macros.append("FLEN=32")
                 else:
                    macros.append("FLEN=32")
-            elif re.match(r"^[^(Z,z)]+C.*$",isa):
-                if re.match(r"^[^(Z,z)]+Zicsr_Zca_Zcb.*$",isa):
-                    macros.append("FLEN=32")
             elif re.match(r"^[^(Z,z)]+Zfinx.*$",isa):
                macros.append("ZFINX=1")
             test_pool.append(
