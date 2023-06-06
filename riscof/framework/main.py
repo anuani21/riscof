@@ -113,7 +113,6 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, work_dir, cgf_file=None)
     logger.info("Running Tests on Reference.")
     base.runTests(test_list, cgf_file)
 
-
     logger.info("Merging Coverage reports")
     cov_files = []
     test_stats = []
@@ -127,16 +126,15 @@ def run_coverage(base, dut_isa_spec, dut_platform_spec, work_dir, cgf_file=None)
                             'test_groups': str(set(test_list[entry[0]]['coverage_labels']))
                             })
     flen = 0
-    if 'F' in ispec['ISA']:
+    if 'F'  or 'Zfinx' or 'Zfh' in ispec['ISA']:
         flen = 32
-    if 'D' in ispec['ISA']:
+    elif 'D' in ispec['ISA']:
         flen = 64
     if 64 in ispec['supported_xlen']:
         results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,64,flen), True)
     elif 32 in ispec['supported_xlen']:
         results = isac.merge_coverage(cov_files, expand_cgf(cgf_file,32,flen), True)
-
-
+   
 #    results_yaml = yaml.load(results)
     results_yaml = filter_coverage(cgf_file,ispec,pspec,results)
     for_html = []

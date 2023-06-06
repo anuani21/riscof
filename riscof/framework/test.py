@@ -334,7 +334,15 @@ def generate_test_pool(ispec, pspec, workdir, dbfile = None):
             if re.match(r"^[^(Z,z)]+D.*$",isa):
                 macros.append("FLEN=64")
             elif re.match(r"^[^(Z,z)]+F.*$",isa):
-                macros.append("FLEN=32")
+                if re.match(r"^[^(Z,z)]+Zicsr_Zfh.*$",isa):
+                    macros.append("FLEN=32")
+                else:
+                   macros.append("FLEN=32")
+            elif re.match(r"^[^(Z,z)]+C.*$",isa):
+                if re.match(r"^[^(Z,z)]+Zicsr_Zca_Zcb.*$",isa):
+                    macros.append("FLEN=32")
+            elif re.match(r"^[^(Z,z)]+Zfinx.*$",isa):
+               macros.append("ZFINX=1")
             test_pool.append(
                 (file, db[file]['commit_id'], macros,isa,cov_labels))
     logger.info("Selecting Tests.")
@@ -391,6 +399,7 @@ def run_tests(dut, base, ispec, pspec, work_dir, cntr_args):
     if cntr_args[1] is not None:
         test_list = utils.load_yaml(cntr_args[1])
     else:
+        print(test_pool)
         test_list, test_pool = generate_test_pool(ispec, pspec, work_dir, cntr_args[0])
     dut_test_list = {}
     base_test_list = {}
